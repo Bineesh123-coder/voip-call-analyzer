@@ -1,0 +1,203 @@
+bineesh@bineesh:~/C++/C++_PROJECTS/voip-call-analyzer$ ./voip_analyzer 
+Reading packets from: ciscotest.pcap
+Packet captured length: 1160
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8df-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 536
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8df-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 491
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8df-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 899
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8df-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 891
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8df-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 1159
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8e1-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 816
+Packet captured length: 535
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8e1-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 490
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8e1-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 898
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8e1-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 890
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8e1-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 816
+Packet captured length: 1159
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e3-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 535
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e3-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 491
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e3-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 898
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e3-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 890
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e3-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 1159
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e5-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 535
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e5-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 490
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e5-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 898
+------ SIP MESSAGE ------
+Method : INVITE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e5-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 890
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e5-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 818
+Packet captured length: 817
+Packet captured length: 660
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e3-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 659
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e5-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 557
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e3-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 556
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4006
+Callee : 7777
+CallID : 894c880-9161fade-8e5-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 660
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8df-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 659
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8e1-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 557
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8df-1c02a8c0@192.168.2.28
+-------------------------
+Packet captured length: 556
+------ SIP MESSAGE ------
+Method : BYE
+Caller : 4002
+Callee : 7777
+CallID : 894c880-9161fade-8e1-1c02a8c0@192.168.2.28
+-------------------------
+bineesh@bineesh:~/C++/C++_PROJECTS/voip-call-analyzer$ 

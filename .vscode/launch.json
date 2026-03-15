@@ -1,0 +1,19 @@
+{
+"version": "0.2.0",
+"configurations": [
+{
+"name": "Run VoIP Analyzer",
+"type": "cppdbg",
+"request": "launch",
+"program": "${workspaceFolder}/voip_analyzer",
+"args": [],
+"stopAtEntry": false,
+"cwd": "${workspaceFolder}",
+"environment": [],
+"externalConsole": false,
+"MIMode": "gdb",
+"miDebuggerPath": "/usr/bin/gdb",
+"preLaunchTask": "Build VoIP Analyzer"
+}
+]
+}
