@@ -35,6 +35,8 @@ struct CallSession
 
     std::string codec_name ="";
 
+    size_t rtp_bytes = 0;
+
 
 };
 
@@ -51,7 +53,7 @@ public:
 
     bool is_rtp(const u_char* payload);
     
-    void process_rtp(const std::string& call_id,const u_char* payload,time_t timestamp);
+    void process_rtp(const std::string& call_id,const u_char* payload,int payload_len,time_t timestamp);
 
     void print_summary();
 

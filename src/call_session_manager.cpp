@@ -77,6 +77,16 @@ void CallSessionManager::print_summary()
             duration = s.last_rtp_time - s.first_rtp_time;
         }
 
+        if(duration > 0)
+        {
+            double bitrate = (s.rtp_bytes * 8.0) / duration;
+
+            cout << "Bitrate : " << bitrate / 1000 << " kbps" << endl;
+        }
+        else{
+            cout<<"cannot calculate Bitrate duration is zero"<<endl;
+        }
+
         std::cout << "Duration : " << duration << " seconds" << endl;
                 std::cout << "--------------------------\n";
     }
@@ -93,11 +103,12 @@ bool CallSessionManager::is_rtp(const u_char* payload)
     return false;
 }
 
-void CallSessionManager::process_rtp(const std::string& call_id, const u_char* payload, time_t timestamp)
+void CallSessionManager::process_rtp(const std::string& call_id, const u_char* payload,int payload_len, time_t timestamp)
 {
     CallSession &session = call_sessions[call_id];
 
     session.rtp_packets++;
+    session.rtp_bytes+= payload_len;
 
     if(session.first_rtp_time == 0)
         session.first_rtp_time = timestamp;
