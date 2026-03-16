@@ -36,7 +36,7 @@ void packet_handler(u_char*, const struct pcap_pkthdr* header, const u_char* pac
 
 
     uint16_t src_port = (packet[14 + ip_header_len] << 8) | packet[15 + ip_header_len];
-    uint16_t dst_port = (packet[16 + ip_header_len] << 8) | packet[17 + ip_header_len];
+    uint16_t dst_port = (packet[16 + ip_header_len] << 8) | packet[17 + ip_header_len]; 
 
     string call_id;
 

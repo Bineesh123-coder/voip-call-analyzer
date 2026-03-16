@@ -108,7 +108,7 @@ void CallSessionManager::process_rtp(const std::string& call_id, const u_char* p
     CallSession &session = call_sessions[call_id];
 
     session.rtp_packets++;
-    session.rtp_bytes+= payload_len;
+    session.rtp_bytes += (payload_len -12);
 
     if(session.first_rtp_time == 0)
         session.first_rtp_time = timestamp;
@@ -167,7 +167,7 @@ void CallSessionManager::process_rtp(const std::string& call_id, const u_char* p
 
 void CallSessionManager::find_MOS_quality(const int packet_loss,double jitter)
 {
-    int MOS = 4.5 - (packet_loss * .1) -(jitter  * .001);
+    double MOS = 4.5 - (packet_loss * .1) -(jitter  * .001);
 
         std::string call_quality = "";
 
