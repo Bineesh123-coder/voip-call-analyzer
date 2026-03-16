@@ -54,6 +54,8 @@ public:
     void process_rtp(const std::string& call_id,const u_char* payload,time_t timestamp);
 
     void print_summary();
+
+    void find_MOS_quality(const int packet_loss,double jitter);
 };
 
 #endif

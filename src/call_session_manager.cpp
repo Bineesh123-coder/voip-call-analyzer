@@ -65,6 +65,8 @@ void CallSessionManager::print_summary()
         double jitter_ms = (s.jitter / 8000.0) * 1000;
         std::cout<<std::fixed<<std::setprecision(2)<< "Jitter : " << jitter_ms<<" ms" << std::endl;
 
+        find_MOS_quality(s.packet_loss,jitter_ms);
+
         int duration = 0;
         if(s.start_time && s.end_time)
         {
@@ -150,4 +152,33 @@ void CallSessionManager::process_rtp(const std::string& call_id, const u_char* p
         session.codec_name = "G729";
     else
         session.codec_name = "Dynamic";
+}
+
+void CallSessionManager::find_MOS_quality(const int packet_loss,double jitter)
+{
+    int MOS = 4.5 - (packet_loss * .1) -(jitter  * .001);
+
+        std::string call_quality = "";
+
+        if(MOS > 4.3)
+        {
+            call_quality = "Excellent";
+        }
+        else if(MOS > 4.0)
+        {
+            call_quality = "Very good";
+        }
+        else if(MOS > 3.6)
+        {
+            call_quality = "Good";
+        }
+        else if(MOS > 3.1)
+        {
+            call_quality = "Fair";
+        }
+        else
+        {
+            call_quality = "Poor";
+        }
+        cout<<"MOS score : "<<MOS<<" Call quality : "<<call_quality<<endl;
 }
