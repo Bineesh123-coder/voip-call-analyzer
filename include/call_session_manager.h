@@ -23,6 +23,17 @@ struct CallSession
     time_t first_rtp_time = 0;
     time_t last_rtp_time = 0;
 
+    uint16_t last_seq = 0;
+    int packet_loss = 0;
+
+    uint32_t last_timestamp = 0;
+
+    double jitter = 0;
+
+    int codec = -1;
+
+    std::string codec_name ="";
+
 
 };
 
@@ -39,7 +50,7 @@ public:
 
     bool is_rtp(const u_char* payload);
     
-    void process_rtp(const std::string& call_id,time_t timestamp);
+    void process_rtp(const std::string& call_id,const u_char* payload,time_t timestamp);
 
     void print_summary();
 };

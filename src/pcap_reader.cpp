@@ -26,6 +26,12 @@ void packet_handler(u_char*, const struct pcap_pkthdr* header, const u_char* pac
     }
     int ip_header_len = (packet[14] & 0x0F) * 4;
 
+    // UDP payload start
+    const u_char* payload = packet + 14 + ip_header_len + 8;
+
+    if(payload[0] >> 6 != 2)
+    return;
+
 
     uint16_t src_port = (packet[14 + ip_header_len] << 8) | packet[15 + ip_header_len];
     uint16_t dst_port = (packet[16 + ip_header_len] << 8) | packet[17 + ip_header_len];
@@ -40,7 +46,7 @@ void packet_handler(u_char*, const struct pcap_pkthdr* header, const u_char* pac
 
     if(!call_id.empty())
     {
-        call_session.process_rtp(call_id,header->ts.tv_sec);
+        call_session.process_rtp(call_id,payload,header->ts.tv_sec);
     }
   
 
