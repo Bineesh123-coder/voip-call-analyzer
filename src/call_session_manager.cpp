@@ -63,7 +63,7 @@ void CallSessionManager::print_summary()
         std::cout << "RTP Packets : " << s.rtp_packets << endl;
         std::cout << "Packet lose : " << s.packet_loss << std::endl;
         double jitter_ms = (s.jitter / 8000.0) * 1000;
-        std::cout << "Jitter : " << jitter_ms<<" ms" << std::endl;
+        std::cout<<std::fixed<<std::setprecision(2)<< "Jitter : " << jitter_ms<<" ms" << std::endl;
 
         int duration = 0;
         if(s.start_time && s.end_time)
