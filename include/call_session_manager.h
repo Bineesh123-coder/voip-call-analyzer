@@ -15,17 +15,31 @@ struct CallSession
     bool bye_seen = false;
 
     int sip_packets = 0;
+    int rtp_packets = 0;
+
+    time_t start_time = 0;
+    time_t end_time = 0;
+
+    time_t first_rtp_time = 0;
+    time_t last_rtp_time = 0;
+
+
 };
 
 class CallSessionManager
 {
-private:
-
-    std::unordered_map<std::string, CallSession> call_sessions;
 
 public:
 
-    void process_sip(const SIPMessage &msg);
+    std::unordered_map<std::string, CallSession> call_sessions;
+
+    std::unordered_map<int,std::string> rtp_port_map;
+
+    void process_sip(const SIPMessage &msg,time_t timestamp);
+
+    bool is_rtp(const u_char* payload);
+    
+    void process_rtp(const std::string& call_id,time_t timestamp);
 
     void print_summary();
 };

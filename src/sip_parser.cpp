@@ -1,6 +1,8 @@
 #include "sip_parser.h"
 #include <sstream>
 
+using namespace std;
+
 bool SIPParser::parse(const std::string &data, SIPMessage &msg)
 {
     std::istringstream stream(data);
@@ -36,6 +38,16 @@ bool SIPParser::parse(const std::string &data, SIPMessage &msg)
         {
             size_t start = line.find(":");
             msg.call_id = line.substr(start + 2);
+        }
+        if(line.find("m=audio") != string::npos)
+        {
+            stringstream ss(line);
+            string media;
+            int port;
+
+            ss >> media >> port;
+
+            msg.rtp_port = port;
         }
     }
 

@@ -8,26 +8,42 @@ CallSessionManager call_session;
 
 void packet_handler(u_char*, const struct pcap_pkthdr* header, const u_char* packet)
 {
-    std::cout << "Packet captured length: " << header->len << std::endl;
+    //std::cout << "Packet captured length: " << header->len << std::endl;
 
     std::string packet_data((char*)packet, header->len);
 
+    
+  
     SIPMessage msg;
     SIPParser parser;
     
 
     if(parser.parse(packet_data, msg))
     {
-        std::cout << "------ SIP MESSAGE ------\n";
-        std::cout << "Method : " << msg.method << std::endl;
-        std::cout << "Caller : " << msg.caller << std::endl;
-        std::cout << "Callee : " << msg.callee << std::endl;
-        std::cout << "CallID : " << msg.call_id << std::endl;
-        std::cout << "-------------------------\n";
-
-        call_session.process_sip(msg);
+       
+        call_session.process_sip(msg,header->ts.tv_sec);
 
     }
+    int ip_header_len = (packet[14] & 0x0F) * 4;
+
+
+    uint16_t src_port = (packet[14 + ip_header_len] << 8) | packet[15 + ip_header_len];
+    uint16_t dst_port = (packet[16 + ip_header_len] << 8) | packet[17 + ip_header_len];
+
+    string call_id;
+
+    if(call_session.rtp_port_map.count(src_port))
+        call_id = call_session.rtp_port_map[src_port];
+
+    if(call_session.rtp_port_map.count(dst_port))
+        call_id = call_session.rtp_port_map[dst_port];
+
+    if(!call_id.empty())
+    {
+        call_session.process_rtp(call_id,header->ts.tv_sec);
+    }
+  
+
 }
 
 void PcapReader::read_pcap(const std::string &file)
@@ -48,7 +64,7 @@ void PcapReader::read_pcap(const std::string &file)
 
         struct bpf_program filter;
 
-        if (pcap_compile(handle, &filter, "udp port 5060", 0, PCAP_NETMASK_UNKNOWN) == -1)
+        if (pcap_compile(handle, &filter, "udp", 0, PCAP_NETMASK_UNKNOWN) == -1)
         {
             std::cout << "Filter compile error\n";
             return;
