@@ -1,8 +1,10 @@
 #include "pcap_reader.h"
+#include "logger.h"
 #include <iostream>
 
 int main(int argc, char* argv[])
-{
+{   
+    Logger::getInstance();   // initializes the logger (creates logs/ folder)
     PcapReader reader;
 
     if(argc < 3)

@@ -1,56 +1,70 @@
 #include "call_session_manager.h"
+#include "logger.h"
 #include <iostream>
 
 using namespace std;
 
+Logger& slog = Logger::getInstance();
+
 void CallSessionManager::process_sip(const SIPMessage &msg, time_t timestamp)
-{
-    if (msg.call_id.empty()) return;
+{   
+    try{
 
-    std::string id = msg.call_id;
-    if (call_sessions.find(id) == call_sessions.end()) {
-        CallSession session;
-        session.call_id = id;
-        session.caller  = msg.caller;
-        session.callee  = msg.callee;
-        call_sessions[id] = session;
-    }
+        if (msg.call_id.empty()) return;
 
-    auto &session = call_sessions[id];
-    session.sip_packets++;
+        std::string id = msg.call_id;
+        if (call_sessions.find(id) == call_sessions.end()) {
+            CallSession session;
+            session.call_id = id;
+            session.caller  = msg.caller;
+            session.callee  = msg.callee;
+            call_sessions[id] = session;
+        }
 
-    // ─── Timestamps ───
-    if (msg.method == "INVITE") {
-        session.invite_seen = true;
-        if (session.start_time == 0) session.start_time = timestamp;
-    }
-    if (msg.method == "BYE") {
-        session.bye_seen = true;
-        session.end_time = timestamp;
-        if (!session.summary_printed) {
-            print_summary(session);
-            session.summary_printed = true;
+        auto &session = call_sessions[id];
+        session.sip_packets++;
+
+        // ─── Timestamps ───
+        if (msg.method == "INVITE") {
+            session.invite_seen = true;
+            if (session.start_time == 0) session.start_time = timestamp;
+        }
+        if (msg.method == "BYE") {
+            session.bye_seen = true;
+            session.end_time = timestamp;
+            if (!session.summary_printed) {
+                print_summary(session);
+                session.summary_printed = true;
+            }
+        }
+
+        // ─── Very important: map RTP port whenever we see SDP ───
+        if (msg.rtp_port > 0) {
+            // Map both source and destination possible ports
+            rtp_port_map[msg.rtp_port] = id;
+
+            // Many implementations send RTP from the same port they advertised
+            // You can also map a range if needed, but usually one port per direction
+
+            if (msg.payload_type >= 0) {
+                session.codec = msg.payload_type;
+                // set codec_name here or in process_rtp
+            }
         }
     }
-
-    // ─── Very important: map RTP port whenever we see SDP ───
-    if (msg.rtp_port > 0) {
-        // Map both source and destination possible ports
-        rtp_port_map[msg.rtp_port] = id;
-
-        // Many implementations send RTP from the same port they advertised
-        // You can also map a range if needed, but usually one port per direction
-
-        if (msg.payload_type >= 0) {
-            session.codec = msg.payload_type;
-            // set codec_name here or in process_rtp
-        }
+    catch(const exception &e)
+    {
+        cout<<"ERROR:CallSessionManager::process_sip"<<e.what() <<endl;
+       slog.WriteLog("ERROR:CallSessionManager::process_sip:"+std::string(e.what()));
     }
+    
 }
 
 void CallSessionManager::print_summary(CallSession &s)
-{
-    std::cout << "\n===== CALL SUMMARY =====\n";
+{   
+    try{
+       
+        std::cout << "\n===== CALL SUMMARY =====\n";
 
      
         std::cout << "Call-ID: " << s.call_id << std::endl;
@@ -91,85 +105,127 @@ void CallSessionManager::print_summary(CallSession &s)
         std::cout << "Duration : " << duration << " seconds" << endl;
                 std::cout << "--------------------------\n";
     
+    
+    
+
+        slog.WriteLog("===== CALL SUMMARY =====");
+        slog.WriteLog("Call-ID: " + s.call_id);
+        slog.WriteLog("Caller : " + s.caller);
+        slog.WriteLog("Callee : " + s.callee);
+        slog.WriteLog("Codec : " + std::to_string(s.codec) + " " + s.codec_name);
+        slog.WriteLog("SIP Packets : " + std::to_string(s.sip_packets));
+        slog.WriteLog("RTP Packets : " + std::to_string(s.rtp_packets));
+        slog.WriteLog("Packet lose : " + std::to_string(s.packet_loss));
+        slog.WriteLog("Jitter : " + std::to_string((s.jitter / 8000.0) * 1000) + " ms");
+        slog.WriteLog("Duration : " + std::to_string(s.end_time - s.start_time) + " seconds");
+        slog.WriteLog("--------------------------");
+        
+    }
+    catch(const exception &e)
+    {
+        cout<<"ERROR:CallSessionManager::print_summary"<<e.what() <<endl;
+       slog.WriteLog("ERROR:CallSessionManager::print_summary:"+std::string(e.what()));
+    }
+    
+
 }
 
-
 bool CallSessionManager::is_rtp(const u_char* payload)
-{
-    int version = (payload[0] >> 6);
+{   
+    try{
 
-    if(version == 2)
-        return true;
+        int version = (payload[0] >> 6);
 
-    return false;
+        if(version == 2)
+            return true;
+
+        return false;
+    }
+    catch(const exception &e)
+    {
+        cout<<"ERROR:PCallSessionManager::is_rtp"<<e.what() <<endl;
+       slog.WriteLog("ERROR:CallSessionManager::is_rtp:"+std::string(e.what()));
+    }
+    
 }
 
 void CallSessionManager::process_rtp(const std::string& call_id, const u_char* payload,int payload_len, time_t timestamp)
-{
-    CallSession &session = call_sessions[call_id];
+{   
+    try{
 
-    session.rtp_packets++;
-    session.rtp_bytes += (payload_len -12);
+        CallSession &session = call_sessions[call_id];
 
-    if(session.first_rtp_time == 0)
-        session.first_rtp_time = timestamp;
+        session.rtp_packets++;
+        session.rtp_bytes += (payload_len -12);
 
-    session.last_rtp_time = timestamp;
+        if(session.first_rtp_time == 0)
+            session.first_rtp_time = timestamp;
 
-    // ----- RTP HEADER PARSING -----
+        session.last_rtp_time = timestamp;
 
-    uint8_t payload_type = payload[1] & 0x7F;
+        // ----- RTP HEADER PARSING -----
 
-    uint16_t seq =
-        (payload[2] << 8) |
-        payload[3];
+        uint8_t payload_type = payload[1] & 0x7F;
 
-    uint32_t rtp_timestamp =
-        (payload[4] << 24) |
-        (payload[5] << 16) |
-        (payload[6] << 8)  |
-        payload[7];
+        uint16_t seq =
+            (payload[2] << 8) |
+            payload[3];
 
-    // Store codec
-    session.codec = payload_type;
+        uint32_t rtp_timestamp =
+            (payload[4] << 24) |
+            (payload[5] << 16) |
+            (payload[6] << 8)  |
+            payload[7];
 
-    // Packet loss detection
-    if(session.last_seq != 0)
-    {
-        int diff = seq - session.last_seq;
+        // Store codec
+        session.codec = payload_type;
 
-        if(diff > 1 && diff < 1000)
+        // Packet loss detection
+        if(session.last_seq != 0)
         {
-            session.packet_loss += (diff - 1);
+            int diff = seq - session.last_seq;
+
+            if(diff > 1 && diff < 1000)
+            {
+                session.packet_loss += (diff - 1);
+            }
+        }
+
+        session.last_seq = seq;
+
+        // Simple jitter calculation
+        if(session.last_timestamp != 0)
+        {
+            int transit = rtp_timestamp - session.last_timestamp;
+
+            int d = abs(transit);
+
+            session.jitter += (d - session.jitter) / 16;
+        }
+
+        session.last_timestamp = rtp_timestamp;
+
+        if (session.codec >= 0) {
+            if (session.codec == 0)  session.codec_name = "PCMU";
+            else if (session.codec == 8)  session.codec_name = "PCMA";
+            else if (session.codec == 18) session.codec_name = "G.729";
+            else if (session.codec == 9)  session.codec_name = "G.722";
+            else session.codec_name = "PT " + std::to_string(session.codec);
         }
     }
-
-    session.last_seq = seq;
-
-    // Simple jitter calculation
-    if(session.last_timestamp != 0)
+    catch(const exception &e)
     {
-        int transit = rtp_timestamp - session.last_timestamp;
-
-        int d = abs(transit);
-
-        session.jitter += (d - session.jitter) / 16;
+        cout<<"ERROR:CallSessionManager::process_rtp"<<e.what() <<endl;
+       slog.WriteLog("ERROR:CallSessionManager::process_rtp:"+std::string(e.what()));
     }
-
-    session.last_timestamp = rtp_timestamp;
-
-    if (session.codec >= 0) {
-        if (session.codec == 0)  session.codec_name = "PCMU";
-        else if (session.codec == 8)  session.codec_name = "PCMA";
-        else if (session.codec == 18) session.codec_name = "G.729";
-        else if (session.codec == 9)  session.codec_name = "G.722";
-        else session.codec_name = "PT " + std::to_string(session.codec);
-    }
+    
 }
 
 void CallSessionManager::find_MOS_quality(const int packet_loss,double jitter)
-{
-    double MOS = 4.5 - (packet_loss * .1) -(jitter  * .001);
+{   
+    try{
+
+        double MOS = 4.5 - (packet_loss * .1) -(jitter  * .001);
 
         std::string call_quality = "";
 
@@ -194,4 +250,11 @@ void CallSessionManager::find_MOS_quality(const int packet_loss,double jitter)
             call_quality = "Poor";
         }
         cout<<"MOS score : "<<MOS<<" Call quality : "<<call_quality<<endl;
+    }
+    catch(const exception &e)
+    {
+        cout<<"ERROR:CallSessionManager::find_MOS_quality"<<e.what() <<endl;
+       slog.WriteLog("ERROR:CallSessionManager::find_MOS_quality:"+std::string(e.what()));
+    }
+    
 }

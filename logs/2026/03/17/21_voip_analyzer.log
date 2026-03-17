@@ -1,0 +1,35 @@
+[21:00:45.426] Reading packets from: pcaps/sip-rtp-g711.pcap
+[21:00:45.427] ===== CALL SUMMARY =====
+[21:00:45.428] Call-ID: 1-1966@10.0.2.20
+[21:00:45.428] Caller : sipp
+[21:00:45.428] Callee : test
+[21:00:45.428] Codec : 127 PT 127
+[21:00:45.428] SIP Packets : 3
+[21:00:45.428] RTP Packets : 426
+[21:00:45.428] Packet lose : 0
+[21:00:45.428] Jitter : 18.750000 ms
+[21:00:45.428] Duration : 9 seconds
+[21:00:45.428] --------------------------
+[21:01:06.302] Reading packets from: pcaps/sip-rtp-g711.pcap
+[21:01:06.303] ===== CALL SUMMARY =====
+[21:01:06.303] Call-ID: 1-1966@10.0.2.20
+[21:01:06.303] Caller : sipp
+[21:01:06.303] Callee : test
+[21:01:06.303] Codec : 127 PT 127
+[21:01:06.303] SIP Packets : 3
+[21:01:06.303] RTP Packets : 426
+[21:01:06.303] Packet lose : 0
+[21:01:06.303] Jitter : 18.750000 ms
+[21:01:06.303] Duration : 9 seconds
+[21:01:06.303] --------------------------
+[21:34:55.995] ===== CALL SUMMARY =====
+[21:34:55.995] Call-ID: 1-1966@10.0.2.20
+[21:34:55.995] Caller : sipp
+[21:34:55.995] Callee : test
+[21:34:55.995] Codec : 127 PT 127
+[21:34:55.995] SIP Packets : 3
+[21:34:55.995] RTP Packets : 426
+[21:34:55.995] Packet lose : 0
+[21:34:55.995] Jitter : 18.750000 ms
+[21:34:55.995] Duration : 9 seconds
+[21:34:55.995] --------------------------

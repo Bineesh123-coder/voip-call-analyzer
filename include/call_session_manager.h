@@ -47,7 +47,7 @@ class CallSessionManager
 
 public:
 
-    
+
 
     std::unordered_map<std::string, CallSession> call_sessions;
 
