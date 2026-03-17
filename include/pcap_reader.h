@@ -12,6 +12,7 @@ class PcapReader
 {
 public:
     void read_pcap(const std::string &file);
+    void capture_live(const std::string& interface);
 };
 
 #endif

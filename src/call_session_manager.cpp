@@ -3,55 +3,56 @@
 
 using namespace std;
 
-void CallSessionManager::process_sip(const SIPMessage &msg,time_t timestamp)
+void CallSessionManager::process_sip(const SIPMessage &msg, time_t timestamp)
 {
+    if (msg.call_id.empty()) return;
+
     std::string id = msg.call_id;
-
-    if(call_sessions.find(id) == call_sessions.end())
-    {
+    if (call_sessions.find(id) == call_sessions.end()) {
         CallSession session;
-
         session.call_id = id;
-        session.caller = msg.caller;
-        session.callee = msg.callee;
-
+        session.caller  = msg.caller;
+        session.callee  = msg.callee;
         call_sessions[id] = session;
     }
 
-    CallSession &session = call_sessions[id];
-
+    auto &session = call_sessions[id];
     session.sip_packets++;
 
-    if(msg.method == "INVITE")
-    {
+    // ─── Timestamps ───
+    if (msg.method == "INVITE") {
         session.invite_seen = true;
-        session.start_time = timestamp;
+        if (session.start_time == 0) session.start_time = timestamp;
     }
-        
-
-    if(msg.method == "BYE")
-    {
+    if (msg.method == "BYE") {
         session.bye_seen = true;
         session.end_time = timestamp;
+        if (!session.summary_printed) {
+            print_summary(session);
+            session.summary_printed = true;
+        }
     }
 
-    if(msg.rtp_port > 0)
-    {
-        rtp_port_map[msg.rtp_port] = msg.call_id;
+    // ─── Very important: map RTP port whenever we see SDP ───
+    if (msg.rtp_port > 0) {
+        // Map both source and destination possible ports
+        rtp_port_map[msg.rtp_port] = id;
+
+        // Many implementations send RTP from the same port they advertised
+        // You can also map a range if needed, but usually one port per direction
+
+        if (msg.payload_type >= 0) {
+            session.codec = msg.payload_type;
+            // set codec_name here or in process_rtp
+        }
     }
-        
 }
 
-void CallSessionManager::print_summary()
+void CallSessionManager::print_summary(CallSession &s)
 {
     std::cout << "\n===== CALL SUMMARY =====\n";
 
-    for(auto &e : call_sessions)
-    {
-        auto &s = e.second;
-
-        
-
+     
         std::cout << "Call-ID: " << s.call_id << std::endl;
         std::cout << "Caller : " << s.caller << std::endl;
         std::cout << "Callee : " << s.callee << std::endl;
@@ -89,7 +90,7 @@ void CallSessionManager::print_summary()
 
         std::cout << "Duration : " << duration << " seconds" << endl;
                 std::cout << "--------------------------\n";
-    }
+    
 }
 
 
@@ -137,8 +138,10 @@ void CallSessionManager::process_rtp(const std::string& call_id, const u_char* p
     {
         int diff = seq - session.last_seq;
 
-        if(diff > 1)
+        if(diff > 1 && diff < 1000)
+        {
             session.packet_loss += (diff - 1);
+        }
     }
 
     session.last_seq = seq;
@@ -155,14 +158,13 @@ void CallSessionManager::process_rtp(const std::string& call_id, const u_char* p
 
     session.last_timestamp = rtp_timestamp;
 
-    if(session.codec == 0)
-    session.codec_name = "G711 PCMU";
-    else if(session.codec == 8)
-        session.codec_name = "G711 PCMA";
-    else if(session.codec == 18)
-        session.codec_name = "G729";
-    else
-        session.codec_name = "Dynamic";
+    if (session.codec >= 0) {
+        if (session.codec == 0)  session.codec_name = "PCMU";
+        else if (session.codec == 8)  session.codec_name = "PCMA";
+        else if (session.codec == 18) session.codec_name = "G.729";
+        else if (session.codec == 9)  session.codec_name = "G.722";
+        else session.codec_name = "PT " + std::to_string(session.codec);
+    }
 }
 
 void CallSessionManager::find_MOS_quality(const int packet_loss,double jitter)

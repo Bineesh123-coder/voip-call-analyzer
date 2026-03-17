@@ -10,6 +10,8 @@ struct SIPMessage
     std::string callee;
     std::string call_id;
     int  rtp_port = 0;
+    std::string status_code;
+    int  payload_type;
 };
 
 class SIPParser

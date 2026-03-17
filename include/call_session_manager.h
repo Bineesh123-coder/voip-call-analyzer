@@ -37,6 +37,8 @@ struct CallSession
     std::string codec_name ="";
 
     size_t rtp_bytes = 0;
+    
+    bool summary_printed = false;
 
 };
 
@@ -45,7 +47,7 @@ class CallSessionManager
 
 public:
 
-   
+    
 
     std::unordered_map<std::string, CallSession> call_sessions;
 
@@ -57,7 +59,7 @@ public:
     
     void process_rtp(const std::string& call_id,const u_char* payload,int payload_len,time_t timestamp);
 
-    void print_summary();
+    void print_summary(CallSession &s);
 
     void find_MOS_quality(const int packet_loss,double jitter);
 };

@@ -1,0 +1,86 @@
+bineesh@bineesh:~/C++/C++_PROJECTS/voip-call-analyzer$ ./voip_analyzer -r pcaps/sip-rtp-g711.pcap
+Reading packets from: pcaps/sip-rtp-g711.pcap
+
+===== CALL SUMMARY =====
+Call-ID: 1-1966@10.0.2.20
+Caller : sipp
+Callee : test
+Codec : -1 
+Packets: 3
+INVITE : Yes
+BYE    : Yes
+SIP Packets : 3
+RTP Packets : 0
+Packet lose : 0
+Jitter : 0.00 ms
+MOS score : 4.50 Call quality : Excellent
+cannot calculate Bitrate duration is zero
+Duration : 0 seconds
+--------------------------
+
+===== CALL SUMMARY =====
+Call-ID: 1-1966@10.0.2.20
+Caller : sipp
+Callee : test
+Codec : 127 Dynamic
+Packets: 4
+INVITE : Yes
+BYE    : Yes
+SIP Packets : 4
+RTP Packets : 426
+Packet lose : 27515
+Jitter : 18.75 ms
+MOS score : -2747.02 Call quality : Poor
+Bitrate : 60.44 kbps
+Duration : 9 seconds
+--------------------------
+
+===== CALL SUMMARY =====
+Call-ID: 1-1966@10.0.2.20
+Caller : sipp
+Callee : test
+Codec : 127 Dynamic
+Packets: 5
+INVITE : Yes
+BYE    : Yes
+SIP Packets : 5
+RTP Packets : 426
+Packet lose : 27515
+Jitter : 18.75 ms
+MOS score : -2747.02 Call quality : Poor
+Bitrate : 60.44 kbps
+Duration : 9 seconds
+--------------------------
+
+===== CALL SUMMARY =====
+Call-ID: 1-1968@10.0.2.20
+Caller : sipp
+Callee : test
+Codec : -1 
+Packets: 3
+INVITE : Yes
+BYE    : Yes
+SIP Packets : 3
+RTP Packets : 0
+Packet lose : 0
+Jitter : 0.00 ms
+MOS score : 4.50 Call quality : Excellent
+cannot calculate Bitrate duration is zero
+Duration : 0 seconds
+--------------------------
+Call-ID: 1-1966@10.0.2.20
+Caller : sipp
+Callee : test
+Codec : 127 Dynamic
+Packets: 5
+INVITE : Yes
+BYE    : Yes
+SIP Packets : 5
+RTP Packets : 426
+Packet lose : 27515
+Jitter : 18.75 ms
+MOS score : -2747.02 Call quality : Poor
+Bitrate : 60.44 kbps
+Duration : 9 seconds
+--------------------------
+bineesh@bineesh:~/C++/C++_PROJECTS/voip-call-analyzer$ 

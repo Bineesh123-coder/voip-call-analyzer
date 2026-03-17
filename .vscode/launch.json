@@ -14,6 +14,37 @@
 "MIMode": "gdb",
 "miDebuggerPath": "/usr/bin/gdb",
 "preLaunchTask": "Build VoIP Analyzer"
+},
+
+
+{
+"name": "Debug PCAP",
+"type": "cppdbg",
+"request": "launch",
+"program": "${workspaceFolder}/voip_analyzer",
+"args": ["-r", "pcaps/sip-rtp-g711.pcap"],
+"stopAtEntry": false,
+"cwd": "${workspaceFolder}",
+"environment": [],
+"externalConsole": false,
+"MIMode": "gdb",
+"miDebuggerPath": "/usr/bin/gdb",
+"preLaunchTask": "Build VoIP Analyzer"
+},
+
+{
+"name": "Debug Live Capture",
+"type": "cppdbg",
+"request": "launch",
+"program": "${workspaceFolder}/voip_analyzer",
+"args": ["-i", "wlo1"],
+"stopAtEntry": false,
+"cwd": "${workspaceFolder}",
+"environment": [],
+"externalConsole": true,
+"MIMode": "gdb",
+"miDebuggerPath": "/usr/bin/gdb",
+"preLaunchTask": "Build VoIP Analyzer"
 }
 ]
 }
